@@ -65,7 +65,7 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
   for (const model of models) {
     try {
       const response = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
+        "https://openrouter-proxy-production.up.railway.app",
         {
           model,
           messages,

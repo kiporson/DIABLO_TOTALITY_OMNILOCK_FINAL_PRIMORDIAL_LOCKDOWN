@@ -5,6 +5,8 @@ const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
 
+const API_KEY = process.env.OPENROUTER_API_KEY;
+
 const app = express();
 const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");

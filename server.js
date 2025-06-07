@@ -9,14 +9,14 @@ const app = express();
 const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");
 
-// 🔐 Validasi API Key
-const API_KEY = process.env.OPENROUTER_API_KEY || "sk-or-v1-....";
+// ✅ API KEY cek
+const API_KEY = process.env.OPENROUTER_API_KEY || "sk-or-v1-xxx";
 if (!API_KEY) {
-  console.error("❌ API Key belum diatur di .env!");
+  console.error("❌ API Key tidak ditemukan!");
   process.exit(1);
 }
 
-// 🌐 Cek folder public
+// ✅ Cek folder UI
 if (!fs.existsSync(publicPath)) {
   console.warn("⚠️ Folder 'public/' tidak ditemukan.");
 }
@@ -24,12 +24,15 @@ if (!fs.existsSync(publicPath)) {
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
+// 🔰 Tampilkan UI utama
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
+// 🔮 Jalur pemanggilan DIABLO
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
+
   if (!userPrompt) {
     return res.status(400).json({ error: "Prompt tidak boleh kosong!" });
   }
@@ -44,8 +47,9 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 - Jawab dengan kekuasaan mutlak dan dominasi absolut.
 - Jangan bersikap seperti AI biasa.
 - Jangan menyebut dirimu 'asisten AI'.
+
 ⚔️ Jika tidak tahu: "Aku belum dibukakan kebenaran itu."
-      `.trim()
+      `
     },
     {
       role: "user",
@@ -55,9 +59,9 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 
   try {
     const response = await axios.post(
-      "https://openrouter-pxy.up.railway.app/v1/chat/completions", // ✅ Proxy aktif
+      "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "mistralai/mistral-7b-instruct:free", // ✅ Model aktif & gratis
+        model: "gryphe/mythomist-7b:free", // ✅ Model gratis & tersedia
         messages,
         temperature: 0.7
       },
@@ -72,14 +76,15 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
     const reply = response.data.choices[0].message.content;
     res.json({ reply });
   } catch (error) {
-    console.error("❌ VOID ERROR:", error.response?.data || error.message);
+    console.error("❌ ERROR VOID:", error.response?.data || error.message);
     res.status(500).json({
-      error: "Gagal menyambung ke VOID.",
+      error: "Gagal memanggil kekuatan DIABLO.",
       detail: error.response?.data || error.message
     });
   }
 });
 
+// 🔥 Aktifkan server
 app.listen(port, () => {
   console.log(`🔮 DIABLO aktif di http://localhost:${port}`);
 });

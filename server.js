@@ -52,7 +52,7 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 
   try {
     const response = await axios.post(
-      "https://gpt.openchat.team/v1/chat/completions",
+      "https://ai.fakeopen.com/v1/chat/completions",
       {
         model: "gpt-3.5-turbo",
         messages,

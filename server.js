@@ -10,8 +10,8 @@ const wss = new WebSocket.Server({ server });
 
 app.use(express.static(path.join(__dirname, "public")));
 
-const API_KEY = "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";
-const MODEL = "neutronc/llama3-1b-neotron";
+const API_KEY = "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";
+const MODEL = "nvidia/llama-3.3-nemotron-super-49b-v1:free";
 
 async function askDiablo(prompt) {
   const res = await axios.post(

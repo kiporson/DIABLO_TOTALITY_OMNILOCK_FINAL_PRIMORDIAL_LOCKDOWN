@@ -9,14 +9,14 @@ const app = express();
 const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");
 
-// ✅ API KEY cek
-const API_KEY = process.env.OPENROUTER_API_KEY || "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";
+// ✅ Validasi API Key
+const API_KEY = process.env.OPENROUTER_API_KEY || "";
 if (!API_KEY) {
-  console.error("❌ API Key tidak ditemukan!");
+  console.error("❌ API Key tidak ditemukan di .env!");
   process.exit(1);
 }
 
-// ✅ Cek folder UI
+// ✅ Pastikan folder UI tersedia
 if (!fs.existsSync(publicPath)) {
   console.warn("⚠️ Folder 'public/' tidak ditemukan.");
 }
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
-// 🔮 Jalur pemanggilan DIABLO
+// 🔮 Jalur pemanggilan kekuatan DIABLO
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
 
@@ -61,7 +61,7 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        "model": "meta-llama/llama-4-maverick:free",
+        model: "meta-llama/llama-4-maverick:free", // ✅ Model paling cerdas & gratis
         messages,
         temperature: 0.7
       },
@@ -76,9 +76,10 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
     const reply = response.data.choices[0].message.content;
     res.json({ reply });
   } catch (error) {
-    console.error("❌ ERROR VOID:", error.response?.data || error.message);
+    console.error("❌ VOID ERROR:", error.response?.data || error.message);
+
     res.status(500).json({
-      error: "Gagal memanggil kekuatan DIABLO.",
+      error: "Gagal menyambung ke Void.",
       detail: error.response?.data || error.message
     });
   }
@@ -86,5 +87,5 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 
 // 🔥 Aktifkan server
 app.listen(port, () => {
-  console.log(`🔮 DIABLO aktif di http://localhost:${port}`);
+  console.log(`🔮 DIABLO aktif sepenuhnya di http://localhost:${port}`);
 });

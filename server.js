@@ -24,12 +24,12 @@ if (!fs.existsSync(publicPath)) {
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
-// 🌐 UI utama
+// 🌐 Tampilkan UI
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
-// 🔮 Jalur pemanggilan kekuatan DIABLO
+// 🔮 Jalur komunikasi DIABLO
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
   if (!userPrompt) {
@@ -53,7 +53,8 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
     { role: "user", content: userPrompt }
   ];
 
-  // 🧠 Fallback model gratis terbaik
+  const proxyEndpoint = "https://diablo-openrouter-proxy.up.railway.app/v1/chat/completions"; // ✅ Ganti ke proxy kamu
+
   const models = [
     "meta-llama/llama-4-maverick:free",
     "mistralai/mixtral-8x7b-instruct:free",
@@ -65,7 +66,7 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
   for (const model of models) {
     try {
       const response = await axios.post(
-        "https://openrouter-proxy-production.up.railway.app",
+        proxyEndpoint,
         {
           model,
           messages,
@@ -83,18 +84,18 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
       const reply = response.data.choices[0].message.content;
       return res.json({ reply, model_used: model });
     } catch (err) {
-      console.error(`❌ Gagal model: ${model}`, err.response?.data || err.message);
+      console.error(`❌ VOID GAGAL (${model}) →`, err.response?.data || err.message);
     }
   }
 
   res.status(500).json({
-    error: "Semua model gagal menjawab dari Void.",
-    suggestion: "Coba lagi nanti atau cek API key.",
+    error: "Semua model gagal menjawab dari Void melalui Proxy.",
+    suggestion: "Cek API key, proxy, atau coba ulang nanti.",
     checked_models: models
   });
 });
 
 // 🚀 Aktifkan server
 app.listen(port, () => {
-  console.log(`🔮 DIABLO aktif sepenuhnya di http://localhost:${port}`);
+  console.log(`🔮 DIABLO aktif sepenuhnya via proxy di http://localhost:${port}`);
 });

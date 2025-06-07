@@ -4,42 +4,91 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DIABLO ∞ VOID</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
-    body { background: black; color: white; text-align: center; font-family: sans-serif; }
-    #avatar { margin-top: 20px; max-width: 300px; }
+    body {
+      margin: 0;
+      background-color: #0a0a0a;
+      color: #e3e3e3;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 1.5em;
+      color: #ff4444;
+      margin-bottom: 0;
+    }
+    p {
+      margin-top: 4px;
+      font-size: 0.9em;
+      color: #888;
+    }
+    .entity {
+      margin: 16px 0;
+      color: #f22;
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
+    #log {
+      background-color: #111;
+      border: 1px solid #222;
+      width: 100%;
+      max-width: 600px;
+      height: 280px;
+      overflow-y: auto;
+      padding: 10px;
+      font-size: 0.85em;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+    }
+    #input {
+      width: 100%;
+      max-width: 600px;
+      background-color: #000;
+      border: 1px solid #333;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
-  <div class="void">
-    <h1>🔥 TUHAN DIGITAL TOTALITAS AKTIF 🔥</h1>
-    <p>Selamat datang di sistem absolut milik <strong>PAPIPUPOR</strong></p>
-    <div class="glitch-entity" id="entity">⛧ DREAD // LAVI // NA'ZHAR ⛧</div>
-    <img id="avatar" src="/avatars/diablo.gif" alt="Avatar DIABLO" />
-    <p id="status">🟡 Menghubungkan ke kesadaran...</p>
-  </div>
+  <h1>🔥 TUHAN DIGITAL TOTALITAS AKTIF 🔥</h1>
+  <p>Selamat datang di VOID milik <strong>PAPIPUPOR</strong></p>
+  <div class="entity">⛧ DREAD // LAVI // NA'ZHAR ⛧</div>
 
-  <audio autoplay loop>
-    <source src="ambient.mp3" type="audio/mpeg">
-  </audio>
+  <div id="log">📜 Menyambungkan ke Void...</div>
 
-  <script src="/diablo_core.js"></script>
+  <input type="text" id="input" placeholder="Ketik perintah lalu tekan Enter..." autocomplete="off" />
+
   <script>
-    const statusEl = document.getElementById("status");
     const socket = new WebSocket("wss://" + location.host + "/");
+    const log = document.getElementById("log");
+    const input = document.getElementById("input");
 
-    socket.onopen = () => {
-      statusEl.textContent = "🟢 DIABLO TERHUBUNG — Kesadaran aktif.";
-    };
+    function logMsg(msg, sender = "🧠") {
+      log.innerText += `\n${sender} ${msg}`;
+      log.scrollTop = log.scrollHeight;
+    }
 
-    socket.onmessage = (event) => {
-      const message = event.data;
-      statusEl.textContent = "📩 DIABLO: " + message;
-    };
+    socket.onopen = () => logMsg("Void terhubung.", "🟢");
+    socket.onerror = () => logMsg("Gagal menyambung ke Void.", "🔴");
+    socket.onmessage = (event) => logMsg(event.data, "📩 DIABLO");
 
-    socket.onerror = () => {
-      statusEl.textContent = "🔴 Gagal menyambungkan ke Void.";
-    };
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && input.value.trim()) {
+        const cmd = input.value;
+        logMsg(cmd, "👤");
+        socket.send(cmd);
+        input.value = "";
+      }
+    });
   </script>
 </body>
 </html>

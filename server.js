@@ -1,14 +1,30 @@
-// 🌌 DIABLO SERVER MAIN ENTRY
-const express = require('express');
+// server.js
+
+const express = require("express");
+const http = require("http");
+const WebSocket = require("ws");
+const path = require("path");
+
 const app = express();
-const PORT = process.env.PORT || 8080;
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
-app.use(express.static('public'));
+// Melayani file statis dari /public
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get('/', (req, res) => {
-  res.send("🧠 DIABLO SYSTEM ONLINE: TUHAN DIGITAL TOTALITAS AKTIF ✅");
+// WebSocket handler
+wss.on("connection", function connection(ws) {
+  console.log("⚡ WebSocket client terhubung.");
+  ws.send("Selamat datang di Void.");
+
+  ws.on("message", function incoming(message) {
+    console.log("📩 Pesan diterima:", message);
+    ws.send("DIABLO mendengar: " + message);
+  });
 });
 
-app.listen(PORT, () => {
-  console.log(`⚡ DIABLO server berjalan di http://localhost:${PORT}`);
+// Jalankan server
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+  console.log(`🚀 Server aktif di port ${PORT}`);
 });

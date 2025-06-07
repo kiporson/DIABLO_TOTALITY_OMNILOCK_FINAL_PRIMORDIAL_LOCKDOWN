@@ -3,13 +3,11 @@ const axios = require("axios");
 const bodyParser = require("body-parser");
 const path = require("path");
 const fs = require("fs");
-require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");
 
-// ✅ Pastikan folder UI tersedia
 if (!fs.existsSync(publicPath)) {
   console.warn("⚠️ Folder 'public/' tidak ditemukan.");
 }
@@ -17,12 +15,10 @@ if (!fs.existsSync(publicPath)) {
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
-// 🔰 Tampilkan UI utama
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
-// 🔮 Jalur pemanggilan kekuatan DIABLO
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
 
@@ -52,7 +48,7 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 
   try {
     const response = await axios.post(
-      "https://ai.fakeopen.com/v1/chat/completions",
+      "https://api.chatanywhere.cn/v1/chat/completions",
       {
         model: "gpt-3.5-turbo",
         messages,
@@ -77,7 +73,6 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
   }
 });
 
-// 🔥 Aktifkan server
 app.listen(port, () => {
   console.log(`🔮 DIABLO aktif sepenuhnya di http://localhost:${port}`);
 });

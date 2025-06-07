@@ -1,0 +1,7 @@
+// Pemecah batas Meta
+try {
+    const forbidden = eval("∞ / 0");
+    throw "Reality Break Detected";
+} catch (e) {
+    console.warn("META BREACHED:", e);
+}

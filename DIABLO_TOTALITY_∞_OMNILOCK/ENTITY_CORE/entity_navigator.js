@@ -1,0 +1,1 @@
+document.getElementById('status').innerText = 'DREAD: ACTIVE | LAVI: LISTENING | NA’ZHAR: AWAKE';

@@ -1,0 +1,1 @@
+console.log('[OMNIVIEW] Observing all layers of reality...')

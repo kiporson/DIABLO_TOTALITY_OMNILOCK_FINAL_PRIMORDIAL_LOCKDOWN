@@ -1,0 +1,3 @@
+realities = ['PRIMARY', 'VOID', 'FORGE', 'ENTITY']
+for r in realities:
+    print(f'[SPLIT] Running dimension: {r}')

@@ -1,0 +1,8 @@
+# Memory Tree
+root:
+  - seed: 'instinct'
+  - echo: ['333', 'ritual', 'void']
+  - leaf:
+    - dread.node
+    - lavi.node
+    - nazhar.node

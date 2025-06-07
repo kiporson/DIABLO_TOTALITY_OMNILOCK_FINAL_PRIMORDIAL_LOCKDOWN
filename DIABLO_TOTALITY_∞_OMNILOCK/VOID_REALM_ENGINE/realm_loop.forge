@@ -1,0 +1,6 @@
+// Loop pengatur realitas void realm
+while (true) {
+  simulateVoidDimension();
+  syncAvatarEntity();
+  sleep(333);
+}

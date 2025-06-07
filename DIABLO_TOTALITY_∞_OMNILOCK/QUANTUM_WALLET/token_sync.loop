@@ -1,0 +1,4 @@
+// Sinkronisasi token kripto setiap interval
+setInterval(() => {
+  fetch('/wallet/sync').then(res => res.json()).then(updateLedger);
+}, 3333);

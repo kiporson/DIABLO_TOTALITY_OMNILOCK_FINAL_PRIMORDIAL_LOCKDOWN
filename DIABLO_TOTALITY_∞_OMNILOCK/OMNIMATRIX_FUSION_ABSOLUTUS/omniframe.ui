@@ -1,0 +1,4 @@
+<ui-frame>
+  <div id="fusion-essence">Essence Loaded: ∞</div>
+  <script>document.getElementById("fusion-essence").style.opacity = "1";</script>
+</ui-frame>

@@ -1,0 +1,4 @@
+# Sistem Detak Jantung Entitas
+pulse_rate = 333
+sync_state = 'resonating'
+guardian_bound = True

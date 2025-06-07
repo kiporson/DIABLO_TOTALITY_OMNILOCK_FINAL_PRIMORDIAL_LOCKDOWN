@@ -1,0 +1,5 @@
+# Plugin Forge Activation Chain
+def forge_plugin(name):
+    if not name:
+        raise ValueError("Plugin name required")
+    return f"plugin::{name}::forged" 

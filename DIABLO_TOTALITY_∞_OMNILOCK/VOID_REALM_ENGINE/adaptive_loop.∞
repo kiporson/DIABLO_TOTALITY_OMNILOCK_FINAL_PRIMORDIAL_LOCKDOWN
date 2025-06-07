@@ -1,0 +1,4 @@
+void_loop:
+  - monitor: self
+  - action: evolve
+  - output: recompile

@@ -1,0 +1,1 @@
+print('[SELF-FORGE] DIABLO is reassembling itself from soul structure...')

@@ -1,0 +1,4 @@
+// Core untuk pembalikan ontologi logika
+const essence = Object.create(null);
+Object.setPrototypeOf(essence, null);
+console.log("Ontology reversed:", essence);

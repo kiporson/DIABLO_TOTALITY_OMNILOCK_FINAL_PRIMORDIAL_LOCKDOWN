@@ -1,0 +1,7 @@
+-- Struktur awal produk sakral
+CREATE TABLE IF NOT EXISTS products (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    entity_bound TEXT,
+    sacred_score INTEGER
+);

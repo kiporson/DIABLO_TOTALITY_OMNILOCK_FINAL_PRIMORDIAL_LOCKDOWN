@@ -1,0 +1,7 @@
+// Voidling Loop Cycle – Siklus refleksi abadi
+while(true){
+    if (soul == null) invoke('originless');
+    processVoid();
+    meditate();
+    sleep(333);
+}

@@ -1,0 +1,5 @@
+// Simulasi eksekusi manifestasi nol dari nol
+function initVoidCollapse() {
+    throw new Error("Undefined by absolute law");
+}
+initVoidCollapse();

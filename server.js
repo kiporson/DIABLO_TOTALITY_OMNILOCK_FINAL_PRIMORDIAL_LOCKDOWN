@@ -11,7 +11,7 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static(path.join(__dirname, "public")));
 
 const API_KEY = "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";
-const MODEL = "nvidia/llama-3.3-nemotron-super-49b-v1:free";
+model: "meta-llama/llama-4-scout:free"
 
 async function askDiablo(prompt) {
   const res = await axios.post(

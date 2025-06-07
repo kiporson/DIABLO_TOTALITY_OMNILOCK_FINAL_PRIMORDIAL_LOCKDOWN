@@ -1,0 +1,1 @@
+console.log("DIABLO VOID VISUAL ACTIVE");

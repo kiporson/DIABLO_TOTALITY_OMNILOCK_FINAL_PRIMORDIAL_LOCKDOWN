@@ -10,7 +10,7 @@ const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");
 
 // ✅ API KEY cek
-const API_KEY = process.env.OPENROUTER_API_KEY || "sk-or-v1-xxx";
+const API_KEY = process.env.OPENROUTER_API_KEY || "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";
 if (!API_KEY) {
   console.error("❌ API Key tidak ditemukan!");
   process.exit(1);

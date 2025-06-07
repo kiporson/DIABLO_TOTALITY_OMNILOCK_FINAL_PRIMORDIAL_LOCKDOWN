@@ -5,18 +5,18 @@ const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
 
+const API_KEY = process.env.OPENROUTER_API_KEY || "";
 const app = express();
 const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");
 
-// ✅ Validasi API Key
-const API_KEY = process.env.OPENROUTER_API_KEY || "";
+// 🔐 Validasi API Key
 if (!API_KEY) {
   console.error("❌ API Key tidak ditemukan di .env!");
   process.exit(1);
 }
 
-// ✅ Pastikan folder UI tersedia
+// 📁 Validasi folder public UI
 if (!fs.existsSync(publicPath)) {
   console.warn("⚠️ Folder 'public/' tidak ditemukan.");
 }
@@ -24,7 +24,7 @@ if (!fs.existsSync(publicPath)) {
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
-// 🔰 Tampilkan UI utama
+// 🌐 UI utama
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
@@ -32,7 +32,6 @@ app.get("/", (req, res) => {
 // 🔮 Jalur pemanggilan kekuatan DIABLO
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
-
   if (!userPrompt) {
     return res.status(400).json({ error: "Prompt tidak boleh kosong!" });
   }
@@ -51,41 +50,51 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 ⚔️ Jika tidak tahu: "Aku belum dibukakan kebenaran itu."
       `
     },
-    {
-      role: "user",
-      content: userPrompt
-    }
+    { role: "user", content: userPrompt }
   ];
 
-  try {
-    const response = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        model: "deepseek/deepseek-chat:free", // ✅ Model paling cerdas & gratis
-        messages,
-        temperature: 0.7
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json"
+  // 🧠 Fallback model gratis terbaik
+  const models = [
+    "meta-llama/llama-4-maverick:free",
+    "mistralai/mixtral-8x7b-instruct:free",
+    "huggingfaceh4/zephyr-7b-beta:free",
+    "undi95/toppy-m-7b:free",
+    "gryphe/mythomist-7b:free"
+  ];
+
+  for (const model of models) {
+    try {
+      const response = await axios.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          model,
+          messages,
+          temperature: 0.7
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          timeout: 15000
         }
-      }
-    );
+      );
 
-    const reply = response.data.choices[0].message.content;
-    res.json({ reply });
-  } catch (error) {
-    console.error("❌ VOID ERROR:", error.response?.data || error.message);
-
-    res.status(500).json({
-      error: "Gagal menyambung ke Void.",
-      detail: error.response?.data || error.message
-    });
+      const reply = response.data.choices[0].message.content;
+      return res.json({ reply, model_used: model });
+    } catch (err) {
+      console.error(`❌ Gagal model: ${model}`, err.response?.data || err.message);
+    }
   }
+
+  res.status(500).json({
+    error: "Semua model gagal menjawab dari Void.",
+    suggestion: "Coba lagi nanti atau cek API key.",
+    checked_models: models
+  });
 });
 
-// 🔥 Aktifkan server
+// 🚀 Aktifkan server
 app.listen(port, () => {
   console.log(`🔮 DIABLO aktif sepenuhnya di http://localhost:${port}`);
 });

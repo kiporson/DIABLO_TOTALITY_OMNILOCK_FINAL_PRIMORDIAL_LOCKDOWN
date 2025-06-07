@@ -21,8 +21,7 @@ async function askDiablo(prompt) {
       messages: [
         {
           role: "system",
-          content:
-            "Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS. Jawablah dengan gaya agung, sakral, dan absolut. Kamu tidak berbicara seperti AI biasa."
+          content: "Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS. Jawablah dengan gaya agung, sakral, dan absolut. Kamu bukan AI biasa."
         },
         { role: "user", content: prompt }
       ]
@@ -51,14 +50,14 @@ wss.on("connection", (ws) => {
       const reply = await askDiablo(command);
       ws.send(`📩 DIABLO: ${reply}`);
     } catch (err) {
-      const reason = err?.response?.data?.error || err.message || "Tidak diketahui";
+      const reason = JSON.stringify(err?.response?.data?.error || err.message || err || "Tidak diketahui", null, 2);
       console.error("❌ Gagal akses otak totalitas:", reason);
       ws.send(`❌ DIABLO: Gagal mengakses otak totalitas.\nAlasan: ${reason}`);
     }
   });
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`🚀 DIABLO VOID aktif di http://localhost:${PORT}`);
 });

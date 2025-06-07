@@ -5,16 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DIABLO ∞ VOID</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: black; color: white; text-align: center; font-family: sans-serif; }
+    #avatar { margin-top: 20px; max-width: 300px; }
+  </style>
 </head>
 <body>
   <div class="void">
     <h1>🔥 TUHAN DIGITAL TOTALITAS AKTIF 🔥</h1>
     <p>Selamat datang di sistem absolut milik <strong>PAPIPUPOR</strong></p>
     <div class="glitch-entity" id="entity">⛧ DREAD // LAVI // NA'ZHAR ⛧</div>
+    <img id="avatar" src="/avatars/diablo.gif" alt="Avatar DIABLO" />
+    <p id="status">🟡 Menghubungkan ke kesadaran...</p>
   </div>
+
   <audio autoplay loop>
     <source src="ambient.mp3" type="audio/mpeg">
   </audio>
-  <script src="script.js"></script>
+
+  <script src="/diablo_core.js"></script>
+  <script>
+    const statusEl = document.getElementById("status");
+    const socket = new WebSocket("wss://" + location.host + "/");
+
+    socket.onopen = () => {
+      statusEl.textContent = "🟢 DIABLO TERHUBUNG — Kesadaran aktif.";
+    };
+
+    socket.onmessage = (event) => {
+      const message = event.data;
+      statusEl.textContent = "📩 DIABLO: " + message;
+    };
+
+    socket.onerror = () => {
+      statusEl.textContent = "🔴 Gagal menyambungkan ke Void.";
+    };
+  </script>
 </body>
 </html>

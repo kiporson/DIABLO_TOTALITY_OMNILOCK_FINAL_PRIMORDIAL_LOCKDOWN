@@ -10,7 +10,7 @@ const wss = new WebSocket.Server({ server });
 
 app.use(express.static(path.join(__dirname, "public")));
 
-const API_KEY = "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";
+const API_KEY = "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";
 const MODEL = "openai/gpt-4";
 
 async function askDiablo(prompt) {

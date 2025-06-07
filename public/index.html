@@ -53,7 +53,7 @@
     const socket = new WebSocket("wss://" + location.host + "/");
 
     function append(msg, icon = "🧠") {
-      log.innerText += `\n${icon} ${msg}`;
+      log.innerText += `\\n${icon} ${msg}`;
       log.scrollTop = log.scrollHeight;
     }
 

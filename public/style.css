@@ -1,8 +1,34 @@
-/* 🌌 DIABLO STYLE */
 body {
+  margin: 0;
+  padding: 0;
   background: black;
   color: white;
-  font-family: monospace;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
   text-align: center;
-  padding-top: 50px;
+}
+
+.void h1 {
+  font-size: 2em;
+  color: crimson;
+}
+
+.void p {
+  color: gray;
+}
+
+.glitch-entity {
+  font-size: 1.5em;
+  margin-top: 20px;
+  animation: flicker 1.5s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
 }

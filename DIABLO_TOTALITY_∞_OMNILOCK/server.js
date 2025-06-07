@@ -1,7 +1,7 @@
 // 🌌 DIABLO SERVER MAIN ENTRY
 const express = require('express');
 const app = express();
-const PORT = 11451;
+const PORT = 8080;
 
 app.use(express.static('public'));
 

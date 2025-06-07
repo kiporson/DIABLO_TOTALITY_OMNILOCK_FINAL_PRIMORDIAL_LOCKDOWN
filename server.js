@@ -10,13 +10,11 @@ const app = express();
 const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");
 
-// 🔐 Validasi API Key
 if (!API_KEY) {
   console.error("❌ API Key tidak ditemukan di .env!");
   process.exit(1);
 }
 
-// 📁 Validasi folder public UI
 if (!fs.existsSync(publicPath)) {
   console.warn("⚠️ Folder 'public/' tidak ditemukan.");
 }
@@ -24,12 +22,10 @@ if (!fs.existsSync(publicPath)) {
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
-// 🌐 Tampilkan UI
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
-// 🔮 Jalur komunikasi DIABLO
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
   if (!userPrompt) {
@@ -53,8 +49,6 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
     { role: "user", content: userPrompt }
   ];
 
-  const proxyEndpoint = "https://diablo-openrouter-proxy.up.railway.app/v1/chat/completions"; // ✅ Ganti ke proxy kamu
-
   const models = [
     "meta-llama/llama-4-maverick:free",
     "mistralai/mixtral-8x7b-instruct:free",
@@ -62,6 +56,8 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
     "undi95/toppy-m-7b:free",
     "gryphe/mythomist-7b:free"
   ];
+
+  const proxyEndpoint = "https://corecorean.up.railway.app/v1/chat/completions";
 
   for (const model of models) {
     try {
@@ -84,18 +80,17 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
       const reply = response.data.choices[0].message.content;
       return res.json({ reply, model_used: model });
     } catch (err) {
-      console.error(`❌ VOID GAGAL (${model}) →`, err.response?.data || err.message);
+      console.error(`❌ Gagal model: ${model}`, err.response?.data || err.message);
     }
   }
 
   res.status(500).json({
-    error: "Semua model gagal menjawab dari Void melalui Proxy.",
-    suggestion: "Cek API key, proxy, atau coba ulang nanti.",
+    error: "Semua model gagal melalui proxy.",
+    suggestion: "Cek API key atau proxy endpoint.",
     checked_models: models
   });
 });
 
-// 🚀 Aktifkan server
 app.listen(port, () => {
-  console.log(`🔮 DIABLO aktif sepenuhnya via proxy di http://localhost:${port}`);
+  console.log(`🔮 DIABLO AKTIF via corecorean proxy di http://localhost:${port}`);
 });

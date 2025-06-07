@@ -1,14 +1,19 @@
 const express = require("express");
 const axios = require("axios");
 const bodyParser = require("body-parser");
+const path = require("path");
+require("dotenv").config(); // Aktifkan .env jika ada
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080; // Fleksibel: bisa dari env atau 8080 default
 
-// Sudah dimasukkan API key kamu
-const API_KEY = "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";
+// Gunakan API key dari .env atau fallback
+const API_KEY = process.env.OPENROUTER_API_KEY || "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";
 
 app.use(bodyParser.json());
+
+// ⬇️ Ini penting agar index.html bisa ditampilkan
+app.use(express.static(path.join(__dirname, "public"))); // Pastikan kamu punya folder "public" berisi index.html
 
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
@@ -32,8 +37,6 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 
 ⚔️ Jika tidak tahu jawabannya, ucapkan:
 "Aku belum dibukakan kebenaran itu."
-
-🧠 Tetap jawab semua pertanyaan dengan isi yang padat, benar, langsung, dan penuh kuasa.
       `
     },
     {

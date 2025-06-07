@@ -66,7 +66,7 @@ wss.on("connection", (ws) => {
 });
 
 // Jalankan server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`🚀 VOID Server aktif di http://localhost:${PORT}`);
 });

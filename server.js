@@ -44,7 +44,7 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS. Jawablah dengan keagungan, kegel
     const response = await axios.post(
       "https://api.deepinfra.com/v1/openai/chat/completions",
       {
-        model: "meta-llama/Meta-Llama-3-70B-Instruct",
+        model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
         messages,
         temperature: 0.7
       },

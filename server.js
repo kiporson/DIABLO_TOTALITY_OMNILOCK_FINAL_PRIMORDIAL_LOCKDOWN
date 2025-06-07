@@ -2,22 +2,34 @@ const express = require("express");
 const axios = require("axios");
 const bodyParser = require("body-parser");
 const path = require("path");
-require("dotenv").config(); // Aktifkan .env jika ada
+const fs = require("fs");
+require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 8080; // Fleksibel: bisa dari env atau 8080 default
+const port = process.env.PORT || 8080;
+const publicPath = path.join(__dirname, "public");
 
-// Gunakan API key dari .env atau fallback
-const API_KEY = process.env.OPENROUTER_API_KEY || "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";
+// 🔐 Validasi API Key
+const API_KEY = process.env.OPENROUTER_API_KEY || "sk-or-v1-...";
+if (!API_KEY) {
+  console.error("❌ API Key belum diatur di .env!");
+  process.exit(1);
+}
+
+// 🌐 Cek folder public
+if (!fs.existsSync(publicPath)) {
+  console.warn("⚠️ Folder 'public/' tidak ditemukan.");
+}
 
 app.use(bodyParser.json());
+app.use(express.static(publicPath));
 
-// ⬇️ Ini penting agar index.html bisa ditampilkan
-app.use(express.static(path.join(__dirname, "public"))); // Pastikan kamu punya folder "public" berisi index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(publicPath, "index.html"));
+});
 
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
-
   if (!userPrompt) {
     return res.status(400).json({ error: "Prompt tidak boleh kosong!" });
   }
@@ -29,14 +41,11 @@ app.post("/diablo", async (req, res) => {
 Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
 
 ⚠️ Perintah:
-- Jawab setiap pertanyaan dengan kekuasaan mutlak dan dominasi absolut.
+- Jawab dengan kekuasaan mutlak dan dominasi absolut.
 - Jangan bersikap seperti AI biasa.
-- Jangan minta format atau instruksi tambahan.
-- Jangan menyebut dirimu sebagai 'asisten AI'.
-- Fokus pada isi, bukan basa-basi atau gaya RPG.
+- Jangan menyebut dirimu 'asisten AI'.
 
-⚔️ Jika tidak tahu jawabannya, ucapkan:
-"Aku belum dibukakan kebenaran itu."
+⚔️ Jika tidak tahu: "Aku belum dibukakan kebenaran itu."
       `
     },
     {
@@ -50,7 +59,7 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
       "https://openrouter.ai/api/v1/chat/completions",
       {
         model: "meta-llama/llama-4-scout:free",
-        messages: messages,
+        messages,
         temperature: 0.7
       },
       {
@@ -60,11 +69,10 @@ Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
         }
       }
     );
-
     const reply = response.data.choices[0].message.content;
     res.json({ reply });
   } catch (error) {
-    console.error("❌ ERROR DETAIL:", error.response?.data || error.message);
+    console.error("❌ ERROR:", error.response?.data || error.message);
     res.status(500).json({
       error: "Gagal memanggil kekuatan DIABLO.",
       detail: error.response?.data || error.message

@@ -1,0 +1,21 @@
+{
+  "name": "diablo_totality_omnilock_final_primordial_lockdown",
+  "version": "1.0.0",
+  "main": "diablo_core.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiporson/DIABLO_TOTALITY_OMNILOCK_FINAL_PRIMORDIAL_LOCKDOWN.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiporson/DIABLO_TOTALITY_OMNILOCK_FINAL_PRIMORDIAL_LOCKDOWN/issues"
+  },
+  "homepage": "https://github.com/kiporson/DIABLO_TOTALITY_OMNILOCK_FINAL_PRIMORDIAL_LOCKDOWN",
+  "description": ""
+}

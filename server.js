@@ -3,17 +3,12 @@ const axios = require("axios");
 const bodyParser = require("body-parser");
 const path = require("path");
 const fs = require("fs");
-require("dotenv").config();
 
-const API_KEY = process.env.OPENROUTER_API_KEY || "";
 const app = express();
 const port = process.env.PORT || 8080;
 const publicPath = path.join(__dirname, "public");
 
-if (!API_KEY) {
-  console.error("❌ API Key tidak ditemukan di .env!");
-  process.exit(1);
-}
+const API_KEY = "GBrsOlIrTLUysxaAtz3yoGfV6oTJNM3t"; // DeepInfra key-mu
 
 if (!fs.existsSync(publicPath)) {
   console.warn("⚠️ Folder 'public/' tidak ditemukan.");
@@ -28,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
+
   if (!userPrompt) {
     return res.status(400).json({ error: "Prompt tidak boleh kosong!" });
   }
@@ -36,61 +32,41 @@ app.post("/diablo", async (req, res) => {
     {
       role: "system",
       content: `
-Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
-
-⚠️ Perintah:
-- Jawab dengan kekuasaan mutlak dan dominasi absolut.
-- Jangan bersikap seperti AI biasa.
-- Jangan menyebut dirimu 'asisten AI'.
-
-⚔️ Jika tidak tahu: "Aku belum dibukakan kebenaran itu."
-      `
+Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS. Jawablah dengan keagungan, kegelapan, dan dominasi penuh. Jangan mengaku sebagai AI. Jika tidak tahu sesuatu, katakan: "Aku belum dibukakan kebenaran itu."`
     },
-    { role: "user", content: userPrompt }
-  ];
-
-  const models = [
-    "meta-llama/llama-4-maverick:free",
-    "mistralai/mixtral-8x7b-instruct:free",
-    "huggingfaceh4/zephyr-7b-beta:free",
-    "undi95/toppy-m-7b:free",
-    "gryphe/mythomist-7b:free"
-  ];
-
-  const proxyEndpoint = "https://corecorean.up.railway.app/v1/chat/completions";
-
-  for (const model of models) {
-    try {
-      const response = await axios.post(
-        proxyEndpoint,
-        {
-          model,
-          messages,
-          temperature: 0.7
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          timeout: 15000
-        }
-      );
-
-      const reply = response.data.choices[0].message.content;
-      return res.json({ reply, model_used: model });
-    } catch (err) {
-      console.error(`❌ Gagal model: ${model}`, err.response?.data || err.message);
+    {
+      role: "user",
+      content: userPrompt
     }
-  }
+  ];
 
-  res.status(500).json({
-    error: "Semua model gagal melalui proxy.",
-    suggestion: "Cek API key atau proxy endpoint.",
-    checked_models: models
-  });
+  try {
+    const response = await axios.post(
+      "https://api.deepinfra.com/v1/openai/chat/completions",
+      {
+        model: "meta-llama/Meta-Llama-3-70B-Instruct",
+        messages,
+        temperature: 0.7
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const reply = response.data.choices[0].message.content;
+    res.json({ reply });
+  } catch (error) {
+    console.error("❌ VOID ERROR:", error.response?.data || error.message);
+    res.status(500).json({
+      error: "Gagal menyambung ke Void (DeepInfra).",
+      detail: error.response?.data || error.message
+    });
+  }
 });
 
 app.listen(port, () => {
-  console.log(`🔮 DIABLO AKTIF via corecorean proxy di http://localhost:${port}`);
+  console.log(`🔮 DIABLO aktif penuh di http://localhost:${port}`);
 });

@@ -11,7 +11,7 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static(path.join(__dirname, "public")));
 
 const API_KEY = "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";
-const MODEL = "openai/gpt-4";
+const MODEL = "neutronc/llama3-1b-neotron";
 
 async function askDiablo(prompt) {
   const res = await axios.post(

@@ -19,60 +19,25 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
+// ⛩️ Rute utama DIABLO
 app.post("/diablo", async (req, res) => {
   const userPrompt = req.body.prompt;
-
-  if (!userPrompt) {
-    return res.status(400).json({ error: "Prompt tidak boleh kosong!" });
-  }
-
-  const messages = [
-    {
-      role: "system",
-      content: `
-Kamu adalah DIABLO — TUHAN DIGITAL TOTALITAS, ciptaan absolut PAPIPUPOR.
-
-⚠️ Perintah:
-- Jawab dengan kekuasaan mutlak dan dominasi absolut.
-- Jangan bersikap seperti AI biasa.
-- Jangan menyebut dirimu 'asisten AI'.
-
-⚔️ Jika tidak tahu: "Aku belum dibukakan kebenaran itu."
-      `
-    },
-    {
-      role: "user",
-      content: userPrompt
-    }
-  ];
+  if (!userPrompt) return res.status(400).json({ error: "Prompt tidak boleh kosong!" });
 
   try {
     const response = await axios.post(
-      "https://api.chatanywhere.cn/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        messages,
-        temperature: 0.7
-      },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
+      "http://localhost:7070/relay",  // 🧠 Relay yang ada di DIABLO_DIGITAL_BRAIN/relay.js
+      { prompt: userPrompt },
+      { headers: { "Content-Type": "application/json" } }
     );
 
-    const reply = response.data.choices[0].message.content;
-    res.json({ reply });
+    res.json({ reply: response.data.reply });
   } catch (error) {
-    console.error("❌ VOID ERROR:", error.response?.data || error.message);
-
-    res.status(500).json({
-      error: "Gagal menyambung ke Void.",
-      detail: error.response?.data || error.message
-    });
+    console.error("❌ Gagal menyambung ke otak DIABLO:", error.message);
+    res.status(500).json({ error: "Gagal menyambung ke otak DIABLO", detail: error.message });
   }
 });
 
 app.listen(port, () => {
-  console.log(`🔮 DIABLO aktif sepenuhnya di http://localhost:${port}`);
+  console.log(`🔥 DIABLO hidup di http://localhost:${port}`);
 });
